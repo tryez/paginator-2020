@@ -1,0 +1,107 @@
+.main-paginator{
+    display: flex;
+}
+.paginator-button-cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    padding: 0px 10px; 
+    margin-left: 4px;
+    border-radius: 4px;
+    background: var(--button-background, rgba(32, 178, 170, 0.8));
+    cursor: pointer;
+    /* background: rgba(32, 178, 170, 0.8); */
+    color: #fff;
+    font-weight: bold;
+    user-select: none;
+}
+.paginator-button-cell.disabled-page-cell{
+    opacity: 0.4;
+    cursor: default;
+}
+.paginator-button-cell.active-page-cell{
+    /* background: rgb(38 129 124); */
+    background: var(--button-active-background, rgb(22 90 86));
+    cursor: default;
+}
+
+.paginator-button-cell:not(.disabled-page-cell):not(.active-page-cell):hover{
+    /* background: rgb(42 205 196 / 80%) !important; */
+    background: var(--button-hover-background,rgb(42 205 196 / 80%)) !important;
+}
+
+.paginator-dropdown{
+    position: absolute;
+    top: calc(100% + 8px);
+    display: block;
+    left: 4px;
+    z-index: 999;
+    border-radius: 4px;
+    cursor: pointer;
+    /* background: rgba(32, 178, 170, 0.8); */
+    background: var(--button-background, rgba(32, 178, 170, 0.8));
+    color: #fff;
+    font-weight: bold;
+    user-select: none;
+    overflow: hidden;
+}
+
+.paginator-dropdown.is-hidden{
+    display: none;
+}
+.paginator-dropdown-item{
+    padding: 6px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100px;
+    
+}
+.paginator-dropdown-item:hover{
+    /* background: rgb(38 129 124); */
+    background: var(--button-hover-background, rgb(38 129 124));
+}
+
+.paginator-dropdown-item.is-active {
+    background: var(--button-active-background, rgb(38 129 124));
+}
+
+.paginator-dropdown-item-check{
+    display: inline-flex;
+}
+
+
+/* .paginator-progress-loader{
+
+} */
+
+
+.paginator-progress-loader-circle{
+    --loader-width: 20px;
+    border: calc(var(--loader-width) / 4) solid #222;
+    border-radius: 50%;
+    border-top: calc(var(--loader-width) / 4) solid orange;
+    width: var(--loader-width);
+    height: var(--loader-width);
+    -webkit-animation: spin 2s linear infinite;
+    animation: paginator-progress-loader-spin 0.6s linear infinite;
+    position: absolute;
+    box-sizing: content-box;
+    left: 6px;;
+}
+
+.paginator-svg{
+    pointer-events: none;
+}
+
+@keyframes paginator-progress-loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
