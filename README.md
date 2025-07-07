@@ -58,7 +58,10 @@ let testPagination = new Pagination({
 ```
 
 
-4. Additional parameters (optional)
+
+
+
+Additional parameters (optional)
 ```js
 let testPagination = new Pagination({
   container: '#main-paginator-container',
@@ -68,7 +71,7 @@ let testPagination = new Pagination({
   requestMethod: 'GET',
   total: 1302,
   max: 10,
-    maxOptions: [5, 10, 15, 20, 40],
+  maxOptions: [5, 10, 15, 20, 40],
   spaceLimit: 9, // pagination buttons limit
   initial_data: [ // data you already have on the page load, otherwise the class will make request to api on page 1 to load initial data.
     {id: 1, name: 'pokemon 1'}, {id: 2, name: 'pokemon 2'}, {id: 3, name: 'pokemon 3'}, 
