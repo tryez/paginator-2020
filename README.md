@@ -64,6 +64,8 @@ let testPagination = new Pagination({
 
 
 ## Additional parameters (optional)
+
+
 ```js
 let testPagination = new Pagination({
   container: '#main-paginator-container',
