@@ -38,6 +38,7 @@ let testPagination = new Pagination({
       limit=${this.max}&offset=${this.page * this.max - this.max}`;
   },
   requestMethod: 'GET',
+  // requestParams: {additionalParameter1: true, additionalParameter2: false} // for POST
   total: 1302, // number of pokemons according to this api
   max: 9,
   maxOptions: [3,9,12,15,18], // optional
