@@ -30,6 +30,7 @@ It needs to be polished a little bit, but it's pretty useful.
 ```
 
 3. Initialize Pagination instance
+
 ```js
 let testPagination = new Pagination({
   container: '#main-paginator-container',
