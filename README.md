@@ -1,6 +1,6 @@
 # Uzna Paginator (2020)
 
-This is a small custom pagination library i wrote back in 2020 when i was working on a learning app for course students.
+This is a lightweight pagination library i wrote back in 2020 when i was working on a learning app for course students.
 It needs to be polished a little bit, but it's pretty useful.
 
 ## Demo
