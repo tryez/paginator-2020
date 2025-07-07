@@ -75,7 +75,7 @@ let testPagination = new Pagination({
   total: 1302,
   max: 10,
   maxOptions: [5, 10, 15, 20, 40],
-  spaceLimit: 9, // pagination buttons limit
+  spaceLimit: 9, // number of pagination buttons (if it can fit on the screen)
   initial_data: [ // data you already have on the page load, otherwise the class will make request to api on page 1 to load initial data.
     {id: 1, name: 'pokemon 1'}, {id: 2, name: 'pokemon 2'}, {id: 3, name: 'pokemon 3'}, 
     {id: 4, name: 'pokemon 4'}, {id: 5, name: 'pokemon 5'}, {id: 6, name: 'pokemon 6'}, 
