@@ -32,7 +32,7 @@ It needs to be polished a little bit, but it's pretty useful.
 3. Initialize Pagination instance
 ```js
 let testPagination = new Pagination({
-    container: '#main-paginator-container',
+  container: '#main-paginator-container',
   generateUrl: function(){
     return `https://pokeapi.co/api/v2/pokemon?limit=${this.max}&offset=${this.page * this.max - this.max}`;
   },
