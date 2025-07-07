@@ -39,7 +39,7 @@ let testPagination = new Pagination({
   requestMethod: 'GET',
   total: 1302, // number of pokemons according to this api
   max: 9,
-    maxOptions: [3,9,12,15,18], // optional
+  maxOptions: [3,9,12,15,18], // optional
   extractResponseData: function(response){
     return response.results;
   },
