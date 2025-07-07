@@ -34,7 +34,8 @@ It needs to be polished a little bit, but it's pretty useful.
 let testPagination = new Pagination({
   container: '#main-paginator-container',
   generateUrl: function(){
-    return `https://pokeapi.co/api/v2/pokemon?limit=${this.max}&offset=${this.page * this.max - this.max}`;
+    return `https://pokeapi.co/api/v2/pokemon?
+      limit=${this.max}&offset=${this.page * this.max - this.max}`;
   },
   requestMethod: 'GET',
   total: 1302, // number of pokemons according to this api
@@ -66,7 +67,8 @@ let testPagination = new Pagination({
 let testPagination = new Pagination({
   container: '#main-paginator-container',
   generateUrl: function(){
-    return `https://pokeapi.co/api/v2/pokemon?limit=${this.max}&offset=${this.page * this.max - this.max}`;
+    return `https://pokeapi.co/api/v2/pokemon?
+      limit=${this.max}&offset=${this.page * this.max - this.max}`;
   },
   requestMethod: 'GET',
   total: 1302,
