@@ -1,6 +1,6 @@
 # Uzna Paginator (2020)
 
-This is a lightweight pagination library i wrote back in 2020 when i was working on a learning app for course students.
+This is a lightweight js pagination library i wrote back in 2020-21 when i was working on [learning.applications.ge](https://learning.applications.ge/module/Laravel).
 It needs to be polished a little bit (for example: "total" needs to be extracted from the response) but it's pretty useful.
 
 ## Demo
