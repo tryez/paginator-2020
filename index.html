@@ -199,6 +199,31 @@ let testPagination2 = new Pagination({
 
 
 
+let  paginator3 = new Pagination({
+	container: '#pagination-container',
+	generateUrl: function() {
+		return `${USERS_API_URL}${this.additionalUrlParams.q ? '/search' : ''}?limit=${this.max}&skip=${(this.page - 1) * this.max}`;
+	},
+	requestMethod: 'GET',
+	extractResponseTotal: response => response.total,
+	max: 10,
+	maxOptions: [5, 10, 15, 20, 25],
+	spaceLimit: 9,
+	extractResponseData: response => response.users,
+	customDraw: data => {
+		users.value = data;
+	},
+	buttonColors: {
+		background: '#2a2c2e',
+		hover: '#565656',
+		// active: '#cd5c5c',
+		active: 'limegreen',
+	},
+});
+
+
+
+
 // also good api for testing images
 // https://www.pexels.com/api/
 

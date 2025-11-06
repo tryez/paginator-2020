@@ -13,6 +13,7 @@ function Pagination(settings){
     this.url = settings.url;
     this.total = settings.total;
     this.renderData = settings.renderData;
+    this.customDraw = settings.customDraw || null;
     this.generateUrl = settings.generateUrl;
     this.requestMethod = settings.requestMethod || 'POST';
     this.urlGetParams = settings.urlGetParams || function(){
@@ -21,6 +22,8 @@ function Pagination(settings){
 	        max: _this.max,
 	    }
     }
+
+    this.additionalUrlParams = {};
 
     const buttonBackgroundColor = settings.buttonColors?.background ? `--button-background: ${settings.buttonColors.background};` : '';
     const buttonHoverColor = settings.buttonColors?.hover ? `--button-hover-background: ${settings.buttonColors.hover};` : '';
@@ -36,6 +39,7 @@ function Pagination(settings){
     this.loading = false;
 
     this.extractResponseData = settings.extractResponseData;
+    this.extractResponseTotal = settings.extractResponseTotal;
     this.drawSkeleton = settings.drawSkeleton;
 
 
@@ -44,7 +48,7 @@ function Pagination(settings){
 
     this.pages = 0;
     
-
+    this.initialLoad = true;
     
     this.spaceLimit = settings.spaceLimit || 8;
     this.savedSpaceLimit = this.spaceLimit;
@@ -59,21 +63,30 @@ function Pagination(settings){
     this.hidden_dropdown = true;
 
     
-    if(this.data){
+    if(this.data && this.total){
         this.updateTable(this.data);
+        this.generatePaginationElements();
+        this.bindEvents();
     }else{
         this.paginate(1);
     }
 
-    this.generatePaginationElements();
-
+    this.bindMaxEvents();
     
 
     Pagination.instances.push(this);
+  
+}
 
 
+Pagination.instances = [];
+Pagination.forceSpaceLimit = null;
+  
 
-    // this.container.on('click', '.paginator-page-button', function(){
+Pagination.prototype.bindEvents = function(){
+    console.log('bindEvents')
+    let _this = this;
+        // this.container.on('click', '.paginator-page-button', function(){
     this.on(this.container, 'click', '.paginator-page-button', function(){
         // if($(this).attr('aria-pressed') === 'true'){
         if( this.getAttribute('aria-pressed') === 'true' ){
@@ -108,7 +121,18 @@ function Pagination(settings){
 
     
     // this.container.on('click', '.paginator-max-button', function(){
+    
+
+
+}
+
+
+Pagination.prototype.bindMaxEvents = function(){
+    let _this = this;
+
     this.on(this.container, 'click', '.paginator-max-button', function(){	
+        console.log('clicked paginator-max-button')
+        console.log('_this.hidden_dropdown', _this.hidden_dropdown)
         _this.hidden_dropdown = !_this.hidden_dropdown;
 
         
@@ -157,21 +181,47 @@ function Pagination(settings){
 
         _this.paginate(target_page);
     })
-
-  
 }
 
-Pagination.instances = [];
-Pagination.forceSpaceLimit = null;
-  
-  
+Pagination.prototype.refresh = function(){
+    // this.paginate(this.page);
+}
+
 Pagination.prototype.paginate = async function(target_page){
     let _this = this;
     this.page = target_page;
 
     try{
+
+        
+
         let response = await this.loadData();
         this.data = this.extractResponseData ? this.extractResponseData(response) : response.data;
+
+
+
+        
+        
+        
+
+
+        if(this.extractResponseTotal){
+            this.total = this.extractResponseTotal(response);
+        }
+
+
+        this.generatePaginationElements();
+        if(this.initialLoad){
+            setTimeout(() => {
+                this.bindEvents();
+            }, 0);
+
+            this.initialLoad = false;
+        }
+
+
+
+
         this.updateTable(this.data);
     }catch(error){
         if(error.name === "AbortError"){
@@ -180,11 +230,21 @@ Pagination.prototype.paginate = async function(target_page){
             throw error;
         }
     }
+    // if(!this.total){
+        
+    // }
     // this.generatePaginationElements();
 }
   
 Pagination.prototype.updateTable = function(data){
     let _this = this;
+
+    if(_this.customDraw){
+        _this.customDraw(data);
+        return;
+    }
+
+    
     let rows_html = '';
 
     if(this.renderData){
@@ -193,7 +253,21 @@ Pagination.prototype.updateTable = function(data){
 
     this.loader_body.innerHTML = rows_html;
 }
-  
+
+
+Pagination.prototype.addUrlParam = function(key, value) {
+  if (!this.additionalUrlParams) {
+    this.additionalUrlParams = {};
+  }
+  this.additionalUrlParams[key] = value;
+}
+
+Pagination.prototype.removeUrlParam = function(key) {
+  if (this.additionalUrlParams && this.additionalUrlParams.hasOwnProperty(key)) {
+    delete this.additionalUrlParams[key];
+  }
+}
+
 Pagination.prototype.loadData = function(){
     let _this = this;
     if(this.loading){
@@ -206,13 +280,23 @@ Pagination.prototype.loadData = function(){
 
         let url_params = _this.toQueryParam(_this.urlGetParams.apply(_this));
 
-        _this.generatePaginationElements();
+        if(_this.total){
+            _this.generatePaginationElements();
+        }
+        
 
 		if(_this.drawSkeleton){
     		_this.displayData(_this.drawSkeleton.apply(_this));
     	}
 
         let url = _this.generateUrl ? _this.generateUrl.apply(_this) : `${_this.url}?${url_params}`;
+
+        if(_this.additionalUrlParams){
+            let additionalParamsString = _this.toQueryParam(_this.additionalUrlParams);
+            if(additionalParamsString){
+                url += url.includes('?') ? '&' + additionalParamsString : '?' + additionalParamsString;
+            }
+        }
 
         let requestSettings = {
             method: _this.requestMethod,
@@ -244,7 +328,7 @@ Pagination.prototype.loadData = function(){
 }
 
 Pagination.prototype.removeProgressLoader = function(){
-	this.paginator_container.querySelector('.paginator-progress-loader').remove();
+	this.paginator_container.querySelector('.paginator-progress-loader')?.remove();
 }
 
 // Pagination.prototype.displayProgressLoader = function(){
@@ -259,10 +343,10 @@ Pagination.prototype.showError = function(message){
 	error_element.textContent = message;
 	error_element.classList.add('pagination-error-message');
 
-	this.loader_body.innerHTML = error_element;
+	// this.loader_body.innerHTML = error_element;
 }
 Pagination.prototype.displayData = function(data){
-	this.loader_body.innerHTML = data;
+	// this.loader_body.innerHTML = data;
 }
   
 Pagination.prototype.toQueryParam  = function(obj){
@@ -312,6 +396,8 @@ Pagination.prototype.findElementsAndCallback = function(parentElement, selector,
 
 
 Pagination.prototype.generatePaginationElements = function(){
+    console.log('generatePaginationElements');
+    console.log('this.total', this.total);
     let _this = this;
     let paginator_container = this.paginator_container;
     paginator_container.innerHTML = '';
@@ -494,3 +580,4 @@ window.addEventListener('click', function (e) {
         Pagination.prototype.closeAllPops();
     }
 });
+
