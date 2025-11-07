@@ -67,6 +67,7 @@ function Pagination(settings){
         this.updateTable(this.data);
         this.generatePaginationElements();
         this.bindEvents();
+        this.initialLoad = false;
     }else{
         this.paginate(1);
     }
